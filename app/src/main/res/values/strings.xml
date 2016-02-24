@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">AndroidFluxPractice</string>
+    <string name="action_settings">Settings</string>
+    <string name="pub_gists_num">%d\nGists</string>
+    <string name="following_num">%d\nFollowing</string>
+    <string name="follower_num">%d\nFollowers</string>
+    <string name="blog">http://www.easydone.cn</string>
+    <string name="email">woshiliangzhitao@gmail.com</string>
+    <string name="pub_repos_num">%d\nRepositories</string>
+    <string name="setting">Setting</string>
+    <string name="setting_item_1">Setting item 1</string>
+    <string name="setting_item_2">Setting item 2</string>
+    <string name="nav_item3">Nav item3</string>
+    <string name="nav_item2">Nav item2</string>
+    <string name="nav_item1">Nav item1</string>
+    <string name="name">Name</string>
 </resources>
