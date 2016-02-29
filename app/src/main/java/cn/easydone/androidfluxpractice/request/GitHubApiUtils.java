@@ -60,7 +60,7 @@ public class GitHubApiUtils {
     private OkHttpClient okHttpClient() {
 
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+        logging.setLevel(HttpLoggingInterceptor.Level.HEADERS).setLevel(HttpLoggingInterceptor.Level.BODY);
 
         OkHttpClient.Builder builder = new OkHttpClient.Builder().addInterceptor(logging).addInterceptor(headerInterceptor);
 

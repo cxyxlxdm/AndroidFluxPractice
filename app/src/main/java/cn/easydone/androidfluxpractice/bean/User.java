@@ -1,7 +1,5 @@
 package cn.easydone.androidfluxpractice.bean;
 
-import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by Android Studio
@@ -9,9 +7,8 @@ import io.realm.annotations.PrimaryKey;
  * Date: 2016-01-09
  * Time: 11:37
  */
-public class User extends RealmObject {
+public class User {
 
-    @PrimaryKey
     private String url;
     private String name;
     private String avatarUrl;
