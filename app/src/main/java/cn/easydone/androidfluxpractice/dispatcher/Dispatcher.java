@@ -13,8 +13,6 @@ import cn.easydone.androidfluxpractice.store.Store;
  * User: liangzhitao
  * Date: 2016-02-24
  * Time: 12:14
- *
- * 包装 EventBus
  */
 public class Dispatcher {
 
