@@ -2,8 +2,6 @@ package cn.easydone.androidfluxpractice.store;
 
 import org.greenrobot.eventbus.EventBus;
 
-import cn.easydone.androidfluxpractice.dispatcher.Dispatcher;
-
 /**
  * Created by Android Studio
  * User: liangzhitao

@@ -63,6 +63,11 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         return users.size();
     }
 
+    public void refreshUi(List<User> users) {
+        this.users = users;
+        notifyDataSetChanged();
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         private final ImageView ivAvatar;

@@ -13,6 +13,7 @@ import cn.easydone.androidfluxpractice.bean.User;
  */
 public class UserAction extends Action {
 
+    public static final String LOADING_START = "loadingStart";
     public static final String INIT_RECYCLER_VIEW = "initRecyclerView";
     public static final String FETCH_DATA_ERROR = "fetchDataError";
 
@@ -20,5 +21,4 @@ public class UserAction extends Action {
         super(type, data);
     }
 
-    public List<User> userList = new ArrayList<>();
 }

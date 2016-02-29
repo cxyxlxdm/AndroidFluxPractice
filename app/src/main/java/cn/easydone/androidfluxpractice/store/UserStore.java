@@ -28,10 +28,13 @@ public class UserStore extends Store<UserAction> {
 
     private static UserStore userStore;
     private List<User> userList;
+    private Throwable throwable;
+    private StoreChangeEvent changeEvent;
 
     public static UserStore getInstance() {
         if (userStore == null) {
-            synchronized (UserStore.class) {}
+            synchronized (UserStore.class) {
+            }
             userStore = new UserStore();
         }
         return userStore;
@@ -41,86 +44,47 @@ public class UserStore extends Store<UserAction> {
         userList = new ArrayList<>();
     }
 
+    public void startLoading() {
+
+    }
+
     public List<User> getUserList() {
         return userList;
+    }
+
+    public Throwable getThrowable() {
+        return throwable;
     }
 
     @Subscribe
     @Override
     public void onAction(final UserAction action) {
-        List<String> users = new ArrayList<>();
-        users.add("liangzhitao");
-        users.add("AlanCheen");
-        users.add("yongjhih");
-        users.add("zzz40500");
-        users.add("greenrobot");
-        users.add("nimengbo");
-        Observable.merge(getObservables(users))
-                .buffer(users.size())
-                .map(new Func1<List<GitHubUser>, List<User>>() {
-                    @Override
-                    public List<User> call(List<GitHubUser> gitHubUsers) {
-                        return getUserList(gitHubUsers);
-                    }
-                })
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<User>>() {
-                    @Override
-                    public void call(List<User> users) {
-                        if (action.getType().equals(UserAction.INIT_RECYCLER_VIEW)) {
-                            userList.addAll(users);
-                            action.setData(users);
-                            post();
-                        }
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        if (action.getType().equals(UserAction.FETCH_DATA_ERROR)) {
-                            action.setData(throwable);
-                            post();
-                        }
-                    }
-                });
+        switch (action.getType()) {
+            case UserAction.LOADING_START:
+                changeEvent = new LoadingStartChangeEvent();
+                post();
+                break;
+            case UserAction.INIT_RECYCLER_VIEW:
+                changeEvent = new InitRecyclerViewChangeEvent();
+                userList = (List<User>) action.getData();
+                post();
+                break;
+            case UserAction.FETCH_DATA_ERROR:
+                changeEvent = new ErrorChangeEvent();
+                throwable = (Throwable) action.getData();
+                post();
+                break;
+        }
     }
 
     @Override
     protected StoreChangeEvent changeEvent() {
-        return new StoreChangeEvent();
+        return changeEvent;
     }
 
-    @NonNull
-    private List<User> getUserList(List<GitHubUser> gitHubUsers) {
-        List<User> userList = new ArrayList<>();
-        for (GitHubUser gitHubUser : gitHubUsers) {
-            userList.add(getUser(gitHubUser));
-        }
-        return userList;
-    }
+    public class LoadingStartChangeEvent extends StoreChangeEvent {}
 
-    @NonNull
-    private List<Observable<GitHubUser>> getObservables(List<String> users) {
-        List<Observable<GitHubUser>> observableList = new ArrayList<>();
-        for (String user : users) {
-            Observable<GitHubUser> observable = GitHubApiUtils.getInstance().getGitHubApi().user(user);
-            observableList.add(observable);
-        }
-        return observableList;
-    }
+    public class InitRecyclerViewChangeEvent extends StoreChangeEvent {}
 
-    @NonNull
-    private User getUser(GitHubUser gitHubUser) {
-        User user = new User();
-        user.setUrl(gitHubUser.url);
-        user.setAvatarUrl(gitHubUser.avatarUrl);
-        user.setName(gitHubUser.name);
-        user.setBlog(gitHubUser.blog);
-        user.setEmail(gitHubUser.email);
-        user.setFollowers(gitHubUser.followers);
-        user.setFollowing(gitHubUser.following);
-        user.setPublicGists(gitHubUser.publicGists);
-        user.setPublicRepos(gitHubUser.publicRepos);
-        return user;
-    }
+    public class ErrorChangeEvent extends StoreChangeEvent {}
 }
