@@ -1,10 +1,5 @@
 package cn.easydone.androidfluxpractice.action;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import cn.easydone.androidfluxpractice.bean.User;
-
 /**
  * Created by Android Studio
  * User: liangzhitao

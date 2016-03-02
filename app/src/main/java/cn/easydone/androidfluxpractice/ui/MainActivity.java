@@ -1,7 +1,7 @@
 package cn.easydone.androidfluxpractice.ui;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -17,7 +17,6 @@ import cn.easydone.androidfluxpractice.R;
 import cn.easydone.androidfluxpractice.action.UserActionCreator;
 import cn.easydone.androidfluxpractice.bean.User;
 import cn.easydone.androidfluxpractice.dispatcher.Dispatcher;
-import cn.easydone.androidfluxpractice.store.Store;
 import cn.easydone.androidfluxpractice.store.UserStore;
 import fr.castorflex.android.circularprogressbar.CircularProgressBar;
 

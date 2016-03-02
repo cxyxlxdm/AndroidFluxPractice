@@ -1,7 +1,5 @@
 package cn.easydone.androidfluxpractice.dispatcher;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.ArrayList;
 import java.util.List;
 

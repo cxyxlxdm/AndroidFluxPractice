@@ -1,22 +1,12 @@
 package cn.easydone.androidfluxpractice.store;
 
-import android.support.annotation.NonNull;
-
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.easydone.androidfluxpractice.action.UserAction;
-import cn.easydone.androidfluxpractice.bean.GitHubUser;
 import cn.easydone.androidfluxpractice.bean.User;
-import cn.easydone.androidfluxpractice.dispatcher.Dispatcher;
-import cn.easydone.androidfluxpractice.request.GitHubApiUtils;
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by Android Studio
@@ -42,10 +32,6 @@ public class UserStore extends Store<UserAction> {
 
     protected UserStore() {
         userList = new ArrayList<>();
-    }
-
-    public void startLoading() {
-
     }
 
     public List<User> getUserList() {
