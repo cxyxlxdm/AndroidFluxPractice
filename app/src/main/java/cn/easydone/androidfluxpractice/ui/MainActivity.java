@@ -8,6 +8,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Toast;
 
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.ViewById;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
@@ -20,7 +23,11 @@ import cn.easydone.androidfluxpractice.dispatcher.Dispatcher;
 import cn.easydone.androidfluxpractice.store.UserStore;
 import fr.castorflex.android.circularprogressbar.CircularProgressBar;
 
+@EActivity(R.layout.activity_main)
 public class MainActivity extends AppCompatActivity {
+
+    @ViewById(R.id.toolbar)
+    Toolbar toolbar;
 
     private UserActionCreator userActionCreator;
     private UserStore userStore;
@@ -32,12 +39,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
         initDependencies();
-        setupView();
     }
 
     private void initDependencies() {
@@ -48,12 +50,18 @@ public class MainActivity extends AppCompatActivity {
         userActionCreator = UserActionCreator.getInstance(dispatcher);
     }
 
-    private void setupView() {
+    @AfterViews
+    void setupView() {
+        setSupportActionBar(toolbar);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         progressBar = (CircularProgressBar) findViewById(R.id.progress_bar);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
+
+        userList = userStore.getUserList();
+        userAdapter = new UserAdapter(userList, MainActivity.this);
+        recyclerView.setAdapter(userAdapter);
 
         List<String> users = new ArrayList<>();
         users.add("liangzhitao");
@@ -64,9 +72,6 @@ public class MainActivity extends AppCompatActivity {
         users.add("nimengbo");
 
         userActionCreator.fetechData(users);
-        userList = userStore.getUserList();
-        userAdapter = new UserAdapter(userList, MainActivity.this);
-        recyclerView.setAdapter(userAdapter);
     }
 
     @Subscribe
