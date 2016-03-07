@@ -1,6 +1,8 @@
 package cn.easydone.androidfluxpractice.ui;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +11,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 import org.greenrobot.eventbus.Subscribe;
@@ -28,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
 
     @ViewById(R.id.toolbar)
     Toolbar toolbar;
+    @ViewById(R.id.fab)
+    FloatingActionButton fab;
 
     private UserActionCreator userActionCreator;
     private UserStore userStore;
@@ -48,6 +53,11 @@ public class MainActivity extends AppCompatActivity {
         dispatcher = Dispatcher.getInstance();
         dispatcher.register(userStore);
         userActionCreator = UserActionCreator.getInstance(dispatcher);
+    }
+
+    @Click(R.id.fab)
+    void fabClick() {
+        Snackbar.make(fab, "This is fab", Snackbar.LENGTH_SHORT).show();
     }
 
     @AfterViews
