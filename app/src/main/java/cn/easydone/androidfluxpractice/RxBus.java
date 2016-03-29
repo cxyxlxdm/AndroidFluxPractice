@@ -6,6 +6,7 @@ import rx.Observer;
 import rx.Subscription;
 import rx.functions.Action1;
 import rx.subjects.PublishSubject;
+import rx.subjects.ReplaySubject;
 import rx.subjects.SerializedSubject;
 
 /**

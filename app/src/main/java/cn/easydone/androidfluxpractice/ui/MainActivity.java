@@ -86,12 +86,22 @@ public class MainActivity extends AppCompatActivity {
         users.add("greenrobot");
         users.add("nimengbo");
 
-        userActionCreator.fetechData(users);
+        userActionCreator.fetchData(users);
 
         onEvent();
     }
 
     private void onEvent() {
+        subscription.add(toSubscription(UserStore.LoadingStartChangeEvent.class,
+                new Action1<UserStore.LoadingStartChangeEvent>() {
+                    @Override
+                    public void call(UserStore.LoadingStartChangeEvent changeEvent) {
+                        if (changeEvent != null) {
+                            progressBar.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }));
+
         subscription.add(toSubscription(UserStore.InitRecyclerViewChangeEvent.class,
                 new Action1<UserStore.InitRecyclerViewChangeEvent>() {
                     @Override
@@ -100,16 +110,6 @@ public class MainActivity extends AppCompatActivity {
                         if (changeEvent != null) {
                             userList = userStore.getUserList();
                             userAdapter.refreshUi(userList);
-                        }
-                    }
-                }));
-
-        subscription.add(toSubscription(UserStore.LoadingStartChangeEvent.class,
-                new Action1<UserStore.LoadingStartChangeEvent>() {
-                    @Override
-                    public void call(UserStore.LoadingStartChangeEvent changeEvent) {
-                        if (changeEvent != null) {
-                            progressBar.setVisibility(View.VISIBLE);
                         }
                     }
                 }));

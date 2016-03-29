@@ -42,7 +42,7 @@ public class UserActionCreator extends ActionCreator {
     }
 
 
-    public void fetechData(List<String> users) {
+    public void fetchData(List<String> users) {
         Observable.merge(getObservables(users))
                 .doOnSubscribe(new Action0() {
                     @Override
