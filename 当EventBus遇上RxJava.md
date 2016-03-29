@@ -65,7 +65,7 @@ public class RxBus {
 ##`RxJava` && `EventBus`
 要实现 `EventBus` 需要满足的条件，在 `RxJava` 里是如何体现的呢？
 
-首先我们需要明确的是，`EventBus` 里都有哪些角色：`Event`、`Subscriber`、`Publisher`，也就是说需要`Event`、`Observer`、`Observable`，Event 自不必说，在 `RxJava` 里既能充当`Observer`，又能充当`Observable`的对象就是 `Subject`，而 `Subject` 是线程非安全的，我们要构造一个线程安全的 `Subject` ，需要用到它的子类 `SerializedSubject`，而实际使用的时候，我们的观察者只需要订阅发生之后的，来自 `Observable` 的数据，因此还需要给 `SerializedSubject` 传入的对象应该是 `PublishSubject`。
+首先我们需要明确的是，`EventBus` 里都有哪些角色：`Event`、`Subscriber`、`Publisher`，也就是说需要`Event`、`Observer`、`Observable`，Event 自不必说，在 `RxJava` 里既能充当`Observer`，又能充当`Observable`的对象就是 `Subject`，而 `Subject` 是线程非安全的，我们要构造一个线程安全的 `Subject` ，需要用到它的子类 `SerializedSubject`，而实际使用的时候，我们的观察者只需要订阅发生之后的，来自 `Observable` 的数据，因此还需要给 `SerializedSubject` 传入 `PublishSubject` 作为参数。
 
 1. 获取 `Bus` 实例，一个单例即可，当然，`EventBus` 还提供了使用 `Builder` 创建实例的方法，可根据具体情况自行实现；
  
