@@ -1,7 +1,5 @@
 package cn.easydone.androidfluxpractice.store;
 
-import org.greenrobot.eventbus.Subscribe;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +40,6 @@ public class UserStore extends Store<UserAction> {
         return throwable;
     }
 
-    @Subscribe
     @Override
     public void onAction(final UserAction action) {
         switch (action.getType()) {

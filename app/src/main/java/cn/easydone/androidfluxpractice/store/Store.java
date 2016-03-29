@@ -1,6 +1,6 @@
 package cn.easydone.androidfluxpractice.store;
 
-import org.greenrobot.eventbus.EventBus;
+import cn.easydone.androidfluxpractice.RxBus;
 
 /**
  * Created by Android Studio
@@ -9,18 +9,10 @@ import org.greenrobot.eventbus.EventBus;
  * Time: 12:26
  */
 public abstract class Store<T> {
-    private EventBus eventBus;
+    private RxBus rxBus;
 
     protected Store() {
-        eventBus = EventBus.getDefault();
-    }
-
-    public void register(Object subscriber) {
-        eventBus.register(subscriber);
-    }
-
-    public void unRegister(Object subscriber) {
-        eventBus.unregister(subscriber);
+        rxBus = RxBus.getInstance();
     }
 
     //处理接收到不同的事件
@@ -31,11 +23,10 @@ public abstract class Store<T> {
     //发送更新UI的事件给View
     protected void post() {
         StoreChangeEvent storeChangeEvent = changeEvent();
-        if (storeChangeEvent != null) {
-            eventBus.post(storeChangeEvent);
+        if (storeChangeEvent != null && rxBus.hasObservers()) {
+            rxBus.post(storeChangeEvent);
         }
     }
 
-    public class StoreChangeEvent {
-    }
+    public class StoreChangeEvent {}
 }

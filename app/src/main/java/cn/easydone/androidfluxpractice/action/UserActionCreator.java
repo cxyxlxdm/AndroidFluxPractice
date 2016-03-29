@@ -11,6 +11,7 @@ import cn.easydone.androidfluxpractice.dispatcher.Dispatcher;
 import cn.easydone.androidfluxpractice.request.GitHubApiUtils;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
@@ -42,8 +43,13 @@ public class UserActionCreator extends ActionCreator {
 
 
     public void fetechData(List<String> users) {
-        dispatcher.dispatch(new UserAction(UserAction.LOADING_START, null));
         Observable.merge(getObservables(users))
+                .doOnSubscribe(new Action0() {
+                    @Override
+                    public void call() {
+                        dispatcher.dispatch(new UserAction(UserAction.LOADING_START, null));
+                    }
+                })
                 .buffer(users.size())
                 .map(new Func1<List<GitHubUser>, List<User>>() {
                     @Override
