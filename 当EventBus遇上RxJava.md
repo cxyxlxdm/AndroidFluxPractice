@@ -107,7 +107,7 @@ public class RxBus {
     }
 	```
 	
-	`EventBus` 接收事件需要通过 `onEvent` 开头的方法来遍历获取，第一次遍历会缓存，仅查找 `onEvent` 开头的方法，同时忽略一些特定 SDK 的方法，可以提高一些效率。在使用 `RxJava` 接收事件的时候，根据传递的事件类型返回特定类型(eventType)的被观察者就可以了，当然，被观察者可能是个集合。
+	`EventBus` 接收事件需要通过 `onEvent` 开头的方法来遍历获取，第一次遍历会缓存，仅查找 `onEvent` 开头的方法，同时忽略一些特定 SDK 的方法，可以提高一些效率。在使用 `RxJava` 接收事件的时候，根据传递的事件类型返回特定类型(eventType)的被观察者就可以了。
 
 	```Java
 	public <T> Subscription toSubscription(final Class<T> type, Observer<T> observer) {
