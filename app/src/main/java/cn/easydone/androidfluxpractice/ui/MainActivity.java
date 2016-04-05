@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         users.add("yongjhih");
         users.add("zzz40500");
         users.add("greenrobot");
-        users.add("nimengbo");
+        users.add("daimajia");
 
         userActionCreator.fetchData(users);
 
