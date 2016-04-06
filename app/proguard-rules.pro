@@ -15,7 +15,6 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
-
 #nuwa
 -keep class cn.jiajixin.nuwa.** { *; }
 
@@ -33,6 +32,21 @@
 
 
 -keep class fr.castorflex.android.circularprogressbar.** { *; }
+-dontwarn fr.castorflex.android.circularprogressbar.**
+
+#okio
+-dontwarn okio.**
+-keep class okio.** { *; }
+-keep interface okio.** { *; }
+
+#okhttp3
+-dontwarn okhttp3.**
+-keep class okhttp3.** { *; }
+-keep interface okhttp3.** { *; }
+
+#androidannotations
+-keep class androidannotations.** { *; }
+-dontwarn org.androidannotations.api.rest**
 
 #retrofit2
 -dontwarn retrofit2.**
@@ -41,6 +55,8 @@
 -keepattributes Exceptions
 
 #rxjava
+-keep class rx.android.** { *; }
+-dontwarn rx.android.**
 -dontwarn sun.misc.**
 -keepclassmembers class rx.internal.util.unsafe.*ArrayQueue*Field* {
    long producerIndex;
