@@ -47,4 +47,5 @@ dependencies {
     compile 'com.github.castorflex.smoothprogressbar:library-circular:1.2.0'
     apt "org.androidannotations:androidannotations:$AAVersion"
     compile "org.androidannotations:androidannotations-api:$AAVersion"
+    compile project(':nuwa')
 }
