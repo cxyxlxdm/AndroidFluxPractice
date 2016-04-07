@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Click(R.id.fab)
     void fabClick() {
-        Snackbar.make(fab, "This is floatingactionbutton", Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(fab, ToastSth.toast(), Snackbar.LENGTH_SHORT).show();
     }
 
     @AfterViews
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         users.add("yongjhih");
         users.add("zzz40500");
         users.add("greenrobot");
-        users.add("daimajia");
+        users.add(ToastSth.people());
 
         userActionCreator.fetchData(users);
 
