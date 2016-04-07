@@ -38,6 +38,8 @@ public class Nuwa {
 
     public static void loadPatch(Context context, String dexPath) {
 
+        Log.i(TAG, "Load Patch Success");
+
         if (context == null) {
             Log.e(TAG, "context is null");
             return;
