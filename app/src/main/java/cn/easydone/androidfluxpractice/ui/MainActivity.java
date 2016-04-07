@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Click(R.id.fab)
     void fabClick() {
-        Snackbar.make(fab, "This is fab", Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(fab, "This is floatingactionbutton", Snackbar.LENGTH_SHORT).show();
     }
 
     @AfterViews
