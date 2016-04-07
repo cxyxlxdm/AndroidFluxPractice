@@ -1,5 +1,7 @@
 package cn.jiajixin.nuwa.util;
 
+import android.util.Log;
+
 import java.lang.reflect.Field;
 
 /**
@@ -10,6 +12,7 @@ public class ReflectionUtils {
             throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
         Field localField = cl.getDeclaredField(field);
         localField.setAccessible(true);
+        Log.i("ReflectionUtils", field);
         return localField.get(obj);
     }
 
