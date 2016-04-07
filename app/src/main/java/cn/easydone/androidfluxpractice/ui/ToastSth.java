@@ -8,10 +8,10 @@ package cn.easydone.androidfluxpractice.ui;
  */
 public class ToastSth {
     public static String toast() {
-        return "This is floatingactionbutton";
+        return "This is fab";
     }
 
     public static String people() {
-        return "daimajia";
+        return "nimengbo";
     }
 }
