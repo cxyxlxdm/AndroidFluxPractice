@@ -49,9 +49,11 @@ public class Nuwa {
             return;
         }
         File dexOptDir = new File(context.getFilesDir(), DEX_OPT_DIR);
+        Log.i(TAG, DEX_OPT_DIR + "Load Patch Success");
         dexOptDir.mkdir();
         try {
             DexUtils.injectDexAtFirst(dexPath, dexOptDir.getAbsolutePath());
+            Log.i(TAG, "after inject patch");
         } catch (Exception e) {
             Log.e(TAG, "inject " + dexPath + " failed");
             e.printStackTrace();

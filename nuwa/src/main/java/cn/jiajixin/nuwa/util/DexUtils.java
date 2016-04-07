@@ -1,5 +1,7 @@
 package cn.jiajixin.nuwa.util;
 
+import android.util.Log;
+
 import java.lang.reflect.Array;
 
 import dalvik.system.DexClassLoader;
@@ -11,7 +13,10 @@ import dalvik.system.PathClassLoader;
 public class DexUtils {
 
     public static void injectDexAtFirst(String dexPath, String defaultDexOptPath) throws NoSuchFieldException, IllegalAccessException, ClassNotFoundException {
+        Log.i("DexUtils", "inject Patch");
         DexClassLoader dexClassLoader = new DexClassLoader(dexPath, defaultDexOptPath, dexPath, getPathClassLoader());
+        Log.i("DexUtils", dexPath);
+        Log.i("DexUtils", defaultDexOptPath);
         Object baseDexElements = getDexElements(getPathList(getPathClassLoader()));
         Object newDexElements = getDexElements(getPathList(dexClassLoader));
         Object allDexElements = combineArray(newDexElements, baseDexElements);

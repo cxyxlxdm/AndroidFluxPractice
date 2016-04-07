@@ -1,5 +1,7 @@
 package cn.jiajixin.nuwa.util;
 
+import android.util.Log;
+
 import java.lang.reflect.Field;
 
 /**
@@ -18,5 +20,7 @@ public class ReflectionUtils {
         Field localField = cl.getDeclaredField(field);
         localField.setAccessible(true);
         localField.set(obj, value);
+        Log.i("ReflectionUtils", field);
+        Log.i("ReflectionUtils", value.toString());
     }
 }
