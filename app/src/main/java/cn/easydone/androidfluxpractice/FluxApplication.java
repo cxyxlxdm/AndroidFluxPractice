@@ -10,7 +10,7 @@ import cn.jiajixin.nuwa.Nuwa;
  * Created by Android Studio
  * User: liangzhitao
  * Date: 16/4/5
- * Time: 下午5:37
+ * Time: 下午5:22
  */
 public class FluxApplication extends Application {
 
