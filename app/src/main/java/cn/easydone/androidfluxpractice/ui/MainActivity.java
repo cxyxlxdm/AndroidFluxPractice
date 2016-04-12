@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import org.androidannotations.annotations.AfterViews;
@@ -24,7 +25,6 @@ import cn.easydone.androidfluxpractice.action.UserActionCreator;
 import cn.easydone.androidfluxpractice.bean.User;
 import cn.easydone.androidfluxpractice.dispatcher.Dispatcher;
 import cn.easydone.androidfluxpractice.store.UserStore;
-import fr.castorflex.android.circularprogressbar.CircularProgressBar;
 import rx.Subscription;
 import rx.functions.Action1;
 import rx.subscriptions.CompositeSubscription;
@@ -42,8 +42,9 @@ public class MainActivity extends AppCompatActivity {
     private UserAdapter userAdapter;
     private Dispatcher dispatcher;
     private List<User> userList;
-    private CircularProgressBar progressBar;
+    private ProgressBar progressBar;
     private CompositeSubscription subscription;
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,14 +62,14 @@ public class MainActivity extends AppCompatActivity {
 
     @Click(R.id.fab)
     void fabClick() {
-        Snackbar.make(fab, ToastSth.toast(), Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(fab, "This is fab", Snackbar.LENGTH_SHORT).show();
     }
 
     @AfterViews
     void setupView() {
         setSupportActionBar(toolbar);
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        progressBar = (CircularProgressBar) findViewById(R.id.progress_bar);
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         assert recyclerView != null;
@@ -84,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
         users.add("yongjhih");
         users.add("zzz40500");
         users.add("greenrobot");
-        users.add(ToastSth.people());
+        users.add("nimengbo");
 
         userActionCreator.fetchData(users);
 
@@ -97,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void call(UserStore.LoadingStartChangeEvent changeEvent) {
                         if (changeEvent != null) {
+                            recyclerView.setVisibility(View.GONE);
                             progressBar.setVisibility(View.VISIBLE);
                         }
                     }
@@ -106,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
                 new Action1<UserStore.InitRecyclerViewChangeEvent>() {
                     @Override
                     public void call(UserStore.InitRecyclerViewChangeEvent changeEvent) {
+                        recyclerView.setVisibility(View.VISIBLE);
                         progressBar.setVisibility(View.GONE);
                         if (changeEvent != null) {
                             userList = userStore.getUserList();
