@@ -11,11 +11,6 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Click;
-import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.ViewById;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,27 +24,25 @@ import rx.Subscription;
 import rx.functions.Action1;
 import rx.subscriptions.CompositeSubscription;
 
-@EActivity(R.layout.activity_main)
 public class MainActivity extends AppCompatActivity {
 
-    @ViewById(R.id.toolbar)
-    Toolbar toolbar;
-    @ViewById(R.id.fab)
-    FloatingActionButton fab;
+    private ProgressBar progressBar;
+    private RecyclerView recyclerView;
 
     private UserActionCreator userActionCreator;
     private UserStore userStore;
     private UserAdapter userAdapter;
     private Dispatcher dispatcher;
     private List<User> userList;
-    private ProgressBar progressBar;
     private CompositeSubscription subscription;
-    private RecyclerView recyclerView;
+    private List<String> users;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
         initDependencies();
+        setupView();
     }
 
     private void initDependencies() {
@@ -60,14 +53,18 @@ public class MainActivity extends AppCompatActivity {
         userActionCreator = UserActionCreator.getInstance(dispatcher);
     }
 
-    @Click(R.id.fab)
-    void fabClick() {
-        Snackbar.make(fab, "This is fab", Snackbar.LENGTH_SHORT).show();
-    }
-
-    @AfterViews
-    void setupView() {
+    private void setupView() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        assert fab != null;
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Snackbar.make(fab, "This is fab", Snackbar.LENGTH_SHORT).show();
+                userActionCreator.fetchData(users);
+            }
+        });
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -79,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         userAdapter = new UserAdapter(userList, MainActivity.this);
         recyclerView.setAdapter(userAdapter);
 
-        List<String> users = new ArrayList<>();
+        users = new ArrayList<>();
         users.add("liangzhitao");
         users.add("AlanCheen");
         users.add("yongjhih");

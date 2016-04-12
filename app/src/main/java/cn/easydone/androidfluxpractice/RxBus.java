@@ -1,6 +1,8 @@
 package cn.easydone.androidfluxpractice;
 
 
+import android.support.annotation.NonNull;
+
 import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
@@ -39,6 +41,7 @@ public class RxBus {
         subject.onNext(object);
     }
 
+    @NonNull
     private  <T> Observable<T> toObservable(final Class<T> type) {
         return subject.ofType(type);
     }
