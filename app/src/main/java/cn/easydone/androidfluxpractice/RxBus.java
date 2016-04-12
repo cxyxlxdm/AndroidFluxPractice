@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.subjects.PublishSubject;
 import rx.subjects.SerializedSubject;
@@ -51,11 +52,11 @@ public class RxBus {
     }
 
     public <T> Subscription toSubscription(final Class<T> type, Observer<T> observer) {
-        return toObservable(type).subscribe(observer);
+        return toObservable(type).observeOn(AndroidSchedulers.mainThread()).subscribe(observer);
     }
 
     public <T> Subscription toSubscription(final Class<T> type, Action1<T> action1) {
-        return toObservable(type).subscribe(action1);
+        return toObservable(type).observeOn(AndroidSchedulers.mainThread()).subscribe(action1);
     }
 }
 
