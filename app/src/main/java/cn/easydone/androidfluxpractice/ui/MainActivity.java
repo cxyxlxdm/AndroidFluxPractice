@@ -21,6 +21,7 @@ import cn.easydone.androidfluxpractice.bean.User;
 import cn.easydone.androidfluxpractice.dispatcher.Dispatcher;
 import cn.easydone.androidfluxpractice.store.UserStore;
 import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.subscriptions.CompositeSubscription;
 
@@ -128,7 +129,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private <T> Subscription toSubscription(Class<T> type, Action1<T> action1) {
-        return RxBus.getInstance().toSubscription(type, action1);
+        return RxBus.getInstance()
+                .toObservable(type)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(action1);
     }
 
     @Override
