@@ -1,4 +1,4 @@
-## 引言
+##引言
 接触过 `EventBus` 和 `RxJava` 的都知道，可以用 `RxJava` 来实现 `EventBus`，网上随便一搜，就可以拿得到代码。但是究竟为什么可以这么做？却没有类似的文章作进一步的深度解析。（本文假定读者都已经了解 `EventBus` 和 `RxJava` 是什么，可以做什么。）<!-- more -->
 
 ```Java
@@ -93,15 +93,26 @@ public class RxBus {
 	```Java
 	public void post(Object object) {
         subject.onNext(object);
-    }
+	}
 	```
+
 	`EventBus` 接收事件需要通过 `onEvent` 开头的方法来遍历获取，第一次遍历会缓存，仅查找 `onEvent` 开头的方法，同时忽略一些特定 SDK 的方法，可以提高一些效率。在使用 `RxJava` 接收事件的时候，根据传递的事件类型(eventType)可以获取对应类型的 `Observable<EventType>` ，那么问题就来了，在这里我们是不是要提供一个返回对应的 `Subscription` 的方法呢？答案是不能！因为我知道，接收事件处理事件是有可能在不同的线程里的，如果在这里我们就提供一个返回 `Subscription` 的方法，那后续的事件处理是在哪个线程呢？在这里就指定了 UI 线程或者异步线程，后面的具体的事件处理就可能会有问题。因此我们只需在需要接收事件的地方，调用方法即可，然后指定线程就可以了。这也是相对于 `Otto` 的一个优势。
 
     ```Java
-    @NonNull
 	public <T> Observable<T> toObservable(final Class<T> type) {
     	return subject.ofType(type);
 	}
+    ```
+
+	在 `Activity` 或 `Fragment` 里再去获取 `Subscription` 。
+
+    ```Java
+    private <T> Subscription toSubscription(Class<T> type, Action1<T> action1) {
+        return RxBus.getInstance()
+                .toObservable(type)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(action1);
+    }
     ```
 
 	最后，非要纠结 `EventBus` 的注册的话，将所有的 `Subscription` add 进 `CompositeSubscription` 就好了。最后，一定不要忘记对 `CompositeSubscription` 取消注册。
