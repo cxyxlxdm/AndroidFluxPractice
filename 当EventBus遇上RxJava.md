@@ -1,5 +1,5 @@
 ##引言
-接触过 `EventBus` 和 `RxJava` 的都知道，可以用 `RxJava` 来实现 `EventBus`，网上随便一搜，就可以拿得到代码。但是究竟为什么可以这么做？却没有类似的文章作进一步的深度解析。（本文假定读者都已经了解 `EventBus` 和 `RxJava` 是什么，可以做什么。）<!-- more -->
+接触过 `EventBus` 和 `RxJava` 的都知道，可以用 `RxJava` 来实现 `EventBus`，网上随便一搜，就可以拿得到代码。但是究竟为什么可以这么做？却没有类似的文章作进一步的深度解析。（本文假定读者都已经了解 `EventBus` 和 `RxJava` 是什么，可以做什么。）
 
 ```Java
 public class RxBus {
