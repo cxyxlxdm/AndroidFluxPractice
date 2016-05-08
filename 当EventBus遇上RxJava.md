@@ -1,5 +1,5 @@
 ##引言
-接触过 `EventBus` 和 `RxJava` 的都知道，可以用 `RxJava` 来实现 `EventBus`，网上随便一搜，就可以拿得到代码。但是究竟为什么可以这么做？却没有类似的文章作进一步的深度解析。（本文假定读者都已经了解 `EventBus` 和 `RxJava` 是什么，可以做什么。）<!-- more -->
+接触过 `EventBus` 和 `RxJava` 的都知道，可以用 `RxJava` 来实现 `EventBus`，网上随便一搜，就可以拿得到代码。但是究竟为什么可以这么做？却没有类似的文章作进一步的深度解析。（本文假定读者都已经了解 `EventBus` 和 `RxJava` 是什么，可以做什么。）
 
 ```Java
 public class RxBus {
@@ -96,12 +96,22 @@ public class RxBus {
 	}
 	```
 
-	`EventBus` 接收事件需要通过 `onEvent` 开头的方法来遍历获取，第一次遍历会缓存，仅查找 `onEvent` 开头的方法，同时忽略一些特定 SDK 的方法，可以提高一些效率。在使用 `RxJava` 接收事件的时候，根据传递的事件类型(eventType)可以获取对应类型的 `Observable<EventType>` ，那么问题就来了，在这里我们是不是要提供一个返回对应的 `Subscription` 的方法呢？答案是不能！因为我知道，接收事件处理事件是有可能在不同的线程里的，如果在这里我们就提供一个返回 `Subscription` 的方法，那后续的事件处理是在哪个线程呢？在这里就指定了 UI 线程或者异步线程，后面的具体的事件处理就可能会有问题。因此我们只需在需要接收事件的地方，调用方法即可，然后指定线程就可以了。这也是相对于 `Otto` 的一个优势。
+	`EventBus` 接收事件需要通过 `onEvent` 开头的方法来遍历获取，第一次遍历会缓存，仅查找 `onEvent` 开头的方法，同时忽略一些特定 SDK 的方法，可以提高一些效率。在使用 `RxJava` 接收事件的时候，根据传递的事件类型(eventType)可以获取对应类型的 `Observable<EventType>` ，那么问题就来了，在这里我们是不是要提供一个返回对应的 `Subscription` 的方法呢？其实是可以的！但是需要指定 `Scheduler` ，因为我们知道，接收事件处理事件是有可能在不同的线程里的，如果在这里我们就提供一个返回 `Subscription` 的方法，那后续的事件处理是在哪个线程呢？因此在这里就指定了 UI 线程或者异步线程，后面的具体的事件处理就可能会有问题。当然，我们也只可以在需要接收事件的地方，调用 `toObservable` 方法，然后指定线程。这也是相对于 `Otto` 的一个优势。
+
+	在 `RxBus` 里：
 
     ```Java
 	public <T> Observable<T> toObservable(final Class<T> type) {
     	return subject.ofType(type);
 	}
+    ```
+    ```Java
+    public <T> Subscription toSubscription(Class<T> type, Action1<T> action1, Scheduler scheduler) {
+        return RxBus.getInstance()
+                .toObservable(type)
+                .observeOn(scheduler)
+                .subscribe(action1);
+    }
     ```
 
 	在 `Activity` 或 `Fragment` 里再去获取 `Subscription` 。
@@ -115,7 +125,9 @@ public class RxBus {
     }
     ```
 
-	最后，非要纠结 `EventBus` 的注册的话，将所有的 `Subscription` add 进 `CompositeSubscription` 就好了。最后，一定不要忘记对 `CompositeSubscription` 取消注册。
+	最后，将所有的 `Subscription` add 进 `CompositeSubscription` 就好了。最后，一定不要忘记对 `CompositeSubscription` 取消注册。
+
+    到这里，有关 `EventBus` 的内容，基本是完了，不过还有一点，`EventBus` 里是有一个 `StickyEvent` 的，什么意思呢，就是说一般流程是，我们先去订阅事件，然后被观察者再去发布事件，观察者去接收事件，但是如果是先发布了事件，再去订阅事件呢？这时候先于订阅事件之前发布的事件就会被丢弃，这时候 `StickyEvent` 就登场了。即便是先于订阅事件之前发布了事件，它已然可以接收一个最近被发布的事件，可以理解为它缓存了一个最近发布的事件，而与订阅状态无关。当然，只是一个！明确了这些，要用 `RxJava` 实现就非常简单了，在 `RxJava` 里有一个 `BehaviorSubject` 完美实现了这个功能，具体实现跟 `PublishSubject` 一模一样。这时候就会有人问了，如果我们想要接收到所有的（而不是一个）在订阅事件之前发布的事件，该怎么办呢？很遗憾，`EventBus` 是无法办到的，但是 `RxJava` 可以！将 `BehaviorSubject` 换成 `RelaySubject` 即可。不过说句题外话，这样的功能好鸡肋啊，感觉适用场景少之又少。我想这也是 `EventBus` 没有去实现这样的功能的原因吧。
 
 ------
 具体使用可以参照[AndroidFluxPractice](https://github.com/liangzhitao/AndroidFluxPractice)，Sample 里将 EventBus 替换为了 RxBus ，完美地实现了一模一样的效果。

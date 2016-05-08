@@ -4,6 +4,9 @@ package cn.easydone.androidfluxpractice;
 import android.support.annotation.NonNull;
 
 import rx.Observable;
+import rx.Scheduler;
+import rx.Subscription;
+import rx.functions.Action1;
 import rx.subjects.PublishSubject;
 import rx.subjects.SerializedSubject;
 
@@ -47,5 +50,11 @@ public class RxBus {
         return subject.hasObservers();
     }
 
+    public <T> Subscription toSubscription(Class<T> type, Action1<T> action1, Scheduler scheduler) {
+        return RxBus.getInstance()
+                .toObservable(type)
+                .observeOn(scheduler)
+                .subscribe(action1);
+    }
 }
 
